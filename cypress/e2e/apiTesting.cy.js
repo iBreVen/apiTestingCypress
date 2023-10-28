@@ -49,13 +49,14 @@ describe("Api Testing", () => {
   ];
 
   let randomPrefix = Math.floor(Math.random() * 5);
-  let randomFN = Math.floor(Math.random() * 10);
-  let randomLN = Math.floor(Math.random() * 10);
-  let randomBN = Math.floor(Math.random() * 10);
+  let randomFN = Math.floor(Math.random() * randomNames.length);
+  let randomLN = Math.floor(Math.random() * randomLastNames.length);
+  let randomBN = Math.floor(Math.random() * randomBookNames.length);
 
   const deleteRequestBody = {
     ID: `${randomISBN}${randomAISLE}`,
   };
+
   const postRequestBody = {
     name: randomBookNames[randomBN],
     isbn: randomISBN,
@@ -85,7 +86,7 @@ describe("Api Testing", () => {
       expect(parseInt(res.body[0].isbn)).to.eq(postRequestBody.isbn);
       expect(parseInt(res.body[0].aisle)).to.eq(postRequestBody.aisle);
       expect(res.body[0].author).to.eq(postRequestBody.author);
-      cy.log(res.body[0])
+      cy.log(res.body[0]);
     });
   }); //Get
 
@@ -93,11 +94,11 @@ describe("Api Testing", () => {
     cy.request({
       method: "DELETE",
       url: url + "/DeleteBook.php",
-      body: deleteRequestBody
+      body: deleteRequestBody,
     }).then((res) => {
       expect(res.status).to.eq(200);
-    }).then((res)=>{
       expect(res.body.msg).to.eq("book is successfully deleted");
-    })
+      cy.log(res.body);
+    });
   }); //Delete
 });
